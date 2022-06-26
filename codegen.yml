@@ -1,5 +1,12 @@
 schema: https://api.spacex.land/graphql/
+documents: './src/graphql/*.graphql'
 generates:
-  ./src/types.d.ts:
+  ./src/types/types.d.ts:
     plugins:
       - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      fetcher: graphql-request
+
+         

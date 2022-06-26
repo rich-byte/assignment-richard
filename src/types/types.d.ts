@@ -1,3 +1,7 @@
+import { GraphQLClient } from 'graphql-request';
+import { RequestInit } from 'graphql-request/dist/types.dom';
+import { useQuery, UseQueryOptions } from 'react-query';
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -9,6 +13,16 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+
+function fetcher<TData, TVariables>(
+  client: GraphQLClient,
+  query: string,
+  variables?: TVariables,
+  headers?: RequestInit['headers']
+) {
+  return async (): Promise<TData> =>
+    client.request<TData, TVariables>(query, variables, headers);
+}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -16,10 +30,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Date: jsonb;
-  ObjectID: string;
-  timestamptz: jsonb;
-  uuid: uuid;
+  Date: any;
+  ObjectID: any;
+  timestamptz: any;
+  uuid: any;
 };
 
 export type Address = {
@@ -1277,3 +1291,34 @@ export type Uuid_Comparison_Exp = {
   _neq?: InputMaybe<Scalars['uuid']>;
   _nin?: InputMaybe<Array<Scalars['uuid']>>;
 };
+
+export type RocketsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type RocketsQuery = {
+  __typename?: 'Query';
+  ships?: Array<{ __typename?: 'Ship'; type?: string | null } | null> | null;
+};
+
+export const RocketsDocument = `
+    query Rockets {
+  ships {
+    type
+  }
+}
+    `;
+export const useRocketsQuery = <TData = RocketsQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables?: RocketsQueryVariables,
+  options?: UseQueryOptions<RocketsQuery, TError, TData>,
+  headers?: RequestInit['headers']
+) =>
+  useQuery<RocketsQuery, TError, TData>(
+    variables === undefined ? ['Rockets'] : ['Rockets', variables],
+    fetcher<RocketsQuery, RocketsQueryVariables>(
+      client,
+      RocketsDocument,
+      variables,
+      headers
+    ),
+    options
+  );
