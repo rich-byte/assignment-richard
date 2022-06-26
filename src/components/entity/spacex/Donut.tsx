@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { useRocketsQuery } from '../../../types/types.d';
 import { GraphQLClient } from 'graphql-request';
 import { QueryClientProvider, QueryClient } from 'react-query';
+import { Card } from 'antd';
 
 const RocketDonut: FC = () => {
   const typeMap = new Map<string, number>();
@@ -70,12 +71,16 @@ const RocketDonut: FC = () => {
           overflow: 'hidden',
           textOverflow: 'ellipsis',
         },
-        content: 'Rockets :)',
+        content: 'Ship Types',
       },
     },
   };
 
-  return <Pie {...config} />;
+  return (
+    <Card title="Ship Types">
+      <Pie {...config} />
+    </Card>
+  );
 };
 
 const queryClient = new QueryClient();
