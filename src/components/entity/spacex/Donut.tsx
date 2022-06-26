@@ -77,7 +77,7 @@ const RocketDonut: FC = () => {
   };
 
   return (
-    <Card title="Ship Types">
+    <Card title="Ship Types by build count">
       <Pie {...config} />
     </Card>
   );

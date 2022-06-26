@@ -1,11 +1,13 @@
 import { FC } from 'react';
 import RocketDonut from '../../components/entity/spacex/Donut';
-import Test from '../../components/entity/spacex/Test';
+import PayLoadlinePlot from '../../components/entity/spacex/LinePlot';
+import PayloadColumnPlot from '../../components/entity/spacex/ColumnPlot';
 
 const TestOverview: FC = () => (
-  <div className="space-y-4 text-right">
-    <Test />
+  <div className="space-y-4">
     <RocketDonut />
+    <PayLoadlinePlot />
+    <PayloadColumnPlot />
   </div>
 );
 

@@ -30,10 +30,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Date: any;
-  ObjectID: any;
-  timestamptz: any;
-  uuid: any;
+  Date: jsonb;
+  ObjectID: uuid;
+  timestamptz: jsonb;
+  uuid: uuid;
 };
 
 export type Address = {
@@ -1299,6 +1299,26 @@ export type RocketsQuery = {
   ships?: Array<{ __typename?: 'Ship'; type?: string | null } | null> | null;
 };
 
+export type PayloadsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type PayloadsQuery = {
+  __typename?: 'Query';
+  launchesPast?: Array<{
+    __typename?: 'Launch';
+    launch_date_local?: any | null;
+    rocket?: {
+      __typename?: 'LaunchRocket';
+      second_stage?: {
+        __typename?: 'LaunchRocketSecondStage';
+        payloads?: Array<{
+          __typename?: 'Payload';
+          payload_mass_kg?: number | null;
+        } | null> | null;
+      } | null;
+    } | null;
+  } | null> | null;
+};
+
 export const RocketsDocument = `
     query Rockets {
   ships {
@@ -1317,6 +1337,36 @@ export const useRocketsQuery = <TData = RocketsQuery, TError = unknown>(
     fetcher<RocketsQuery, RocketsQueryVariables>(
       client,
       RocketsDocument,
+      variables,
+      headers
+    ),
+    options
+  );
+export const PayloadsDocument = `
+    query Payloads {
+  launchesPast(find: {launch_year: "2020"}) {
+    launch_date_local
+    rocket {
+      second_stage {
+        payloads {
+          payload_mass_kg
+        }
+      }
+    }
+  }
+}
+    `;
+export const usePayloadsQuery = <TData = PayloadsQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables?: PayloadsQueryVariables,
+  options?: UseQueryOptions<PayloadsQuery, TError, TData>,
+  headers?: RequestInit['headers']
+) =>
+  useQuery<PayloadsQuery, TError, TData>(
+    variables === undefined ? ['Payloads'] : ['Payloads', variables],
+    fetcher<PayloadsQuery, PayloadsQueryVariables>(
+      client,
+      PayloadsDocument,
       variables,
       headers
     ),

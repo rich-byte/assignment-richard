@@ -5,3 +5,16 @@ query Rockets {
     }
     
 }
+
+query Payloads {
+    launchesPast(find: {launch_year: "2020"}) {
+        launch_date_local
+        rocket {
+        second_stage {
+            payloads {
+            payload_mass_kg
+            }
+        }
+        }
+    }
+}
