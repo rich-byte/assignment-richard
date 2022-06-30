@@ -8,7 +8,7 @@ import { queryClient, graphqlClient } from './Clients';
 const PayloadlinePlot: FC = () => {
   const result = usePayloadsQuery(graphqlClient);
   const data: {
-    month: number;
+    month: string; // antd plot needs a string here, no number!
     payloadkg: number;
   }[] = [];
 
@@ -47,15 +47,17 @@ const PayloadlinePlot: FC = () => {
 
     // create Line Plot data
     for (const monthlyPayload of monthlyPayloadMap) {
-      const monthlyPayloadData: { month: number; payloadkg: number } = {
-        month: monthlyPayload[0],
+      const monthlyPayloadData: { month: string; payloadkg: number } = {
+        month: monthlyPayload[0].toString(),
         payloadkg: monthlyPayload[1],
       };
       data.push(monthlyPayloadData);
     }
 
     // sort by ascending months so that data is displayed correctly in plot
-    data.sort((a, b) => (a.month < b.month ? -1 : 1));
+    data.sort((a, b) =>
+      parseInt(a.month, 10) < parseInt(b.month, 10) ? -1 : 1
+    );
   }
 
   const config = {
