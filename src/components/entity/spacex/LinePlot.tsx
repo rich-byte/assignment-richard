@@ -1,13 +1,12 @@
 import { Line } from '@ant-design/plots';
 import { Card } from 'antd';
-import { GraphQLClient } from 'graphql-request';
 import { FC } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
 import { usePayloadsQuery } from '../../../types/types.d';
+import { queryClient, graphqlClient } from './Clients';
 
 const PayloadlinePlot: FC = () => {
-  const client = new GraphQLClient('https://api.spacex.land/graphql/');
-  const result = usePayloadsQuery(client);
+  const result = usePayloadsQuery(graphqlClient);
   const data: {
     month: number;
     payloadkg: number;
@@ -71,8 +70,6 @@ const PayloadlinePlot: FC = () => {
     </Card>
   );
 };
-
-const queryClient = new QueryClient();
 
 export default function Wrapped() {
   return (

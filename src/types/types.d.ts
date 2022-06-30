@@ -30,10 +30,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Date: jsonb;
-  ObjectID: uuid;
-  timestamptz: jsonb;
-  uuid: uuid;
+  Date: any;
+  ObjectID: any;
+  timestamptz: any;
+  uuid: any;
 };
 
 export type Address = {
@@ -1319,6 +1319,21 @@ export type PayloadsQuery = {
   } | null> | null;
 };
 
+export type LaunchSuccessQueryVariables = Exact<{ [key: string]: never }>;
+
+export type LaunchSuccessQuery = {
+  __typename?: 'Query';
+  launchesPastResult?: {
+    __typename?: 'LaunchesPastResult';
+    data?: Array<{
+      __typename?: 'Launch';
+      launch_success?: boolean | null;
+      launch_date_local?: any | null;
+    } | null> | null;
+    result?: { __typename?: 'Result'; totalCount?: number | null } | null;
+  } | null;
+};
+
 export const RocketsDocument = `
     query Rockets {
   ships {
@@ -1367,6 +1382,38 @@ export const usePayloadsQuery = <TData = PayloadsQuery, TError = unknown>(
     fetcher<PayloadsQuery, PayloadsQueryVariables>(
       client,
       PayloadsDocument,
+      variables,
+      headers
+    ),
+    options
+  );
+export const LaunchSuccessDocument = `
+    query LaunchSuccess {
+  launchesPastResult {
+    data {
+      launch_success
+      launch_date_local
+    }
+    result {
+      totalCount
+    }
+  }
+}
+    `;
+export const useLaunchSuccessQuery = <
+  TData = LaunchSuccessQuery,
+  TError = unknown
+>(
+  client: GraphQLClient,
+  variables?: LaunchSuccessQueryVariables,
+  options?: UseQueryOptions<LaunchSuccessQuery, TError, TData>,
+  headers?: RequestInit['headers']
+) =>
+  useQuery<LaunchSuccessQuery, TError, TData>(
+    variables === undefined ? ['LaunchSuccess'] : ['LaunchSuccess', variables],
+    fetcher<LaunchSuccessQuery, LaunchSuccessQueryVariables>(
+      client,
+      LaunchSuccessDocument,
       variables,
       headers
     ),

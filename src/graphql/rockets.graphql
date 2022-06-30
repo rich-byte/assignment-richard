@@ -1,11 +1,12 @@
+# get types of ships for Donut chart
 query Rockets {
-    # Part for Donut chart
     ships {
         type
     }
     
 }
 
+# payload data for Line plot
 query Payloads {
     launchesPast(find: {launch_year: "2020"}) {
         launch_date_local
@@ -17,4 +18,17 @@ query Payloads {
         }
         }
     }
+}
+
+# launch success
+query LaunchSuccess {
+    launchesPastResult {
+        data {
+            launch_success
+            launch_date_local
+        }
+        result {
+            totalCount
+        }
+  }
 }
